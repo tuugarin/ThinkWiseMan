@@ -1,0 +1,3 @@
+[submodule "Source/ThinkWiseMan/Prism"]
+	path = Source/ThinkWiseMan/Prism
+	url = https://github.com/PrismLibrary/Prism.git
