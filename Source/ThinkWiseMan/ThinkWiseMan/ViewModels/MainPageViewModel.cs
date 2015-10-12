@@ -4,6 +4,6 @@ namespace ThinkWiseMan.ViewModels
 {
     public class MainPageViewModel : ViewModelBase
     {
-        public string Text => "Hello, world!";
+        public string Text => "Hi, world!";
     }
 }
