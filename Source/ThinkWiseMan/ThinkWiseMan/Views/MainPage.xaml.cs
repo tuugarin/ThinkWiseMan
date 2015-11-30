@@ -1,4 +1,9 @@
-﻿using Windows.UI.Xaml.Controls;
+﻿using System.Linq;
+using Windows.ApplicationModel.Background;
+using Windows.Data.Xml.Dom;
+using Windows.UI.Notifications;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Navigation;
 
 namespace ThinkWiseMan.Views
 {
@@ -7,6 +12,9 @@ namespace ThinkWiseMan.Views
         public MainPage()
         {
             this.InitializeComponent();
+            
         }
+
+      
     }
 }

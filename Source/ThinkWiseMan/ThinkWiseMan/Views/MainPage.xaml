@@ -9,7 +9,25 @@
     prism:ViewModelLocator.AutoWireViewModel="true"
     mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <TextBlock Text="{Binding Text}"/>
-    </Grid>
+    <!--<StackPanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">-->
+        <!--<DatePicker BorderThickness="0" BorderBrush="Transparent"  HorizontalAlignment="Left" YearVisible="False" Date="{Binding CurrentDate, Mode=TwoWay}" Margin="10,10,0,0" VerticalAlignment="Top"/>-->
+        <FlipView Background="Transparent" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ItemsSource="{Binding Ideas}">
+            <FlipView.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <RichTextBlock  HorizontalAlignment="Center" Padding="100,100,100,100" VerticalAlignment="Center">
+                            <Paragraph FontFamily="Sitka Display" FontSize="24" FontStyle="Italic">
+                                <Run Text="{Binding Content}"></Run>
+                            </Paragraph>
+                            <Paragraph FontFamily="Sitka Display" TextAlignment="Right" FontStyle="Italic" FontSize="18.667">
+                                    <Run Text="{Binding Author}"></Run>
+                            </Paragraph>
+                        </RichTextBlock>
+                        <!--<TextBlock TextWrapping="Wrap" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding Content}" />
+                        <TextBlock TextWrapping="Wrap" VerticalAlignment="Center" Text="{Binding Author}" HorizontalAlignment="Right" />-->
+                    </Grid>
+                </DataTemplate>
+            </FlipView.ItemTemplate>
+        </FlipView>
+    <!--</StackPanel>-->
 </Page>
