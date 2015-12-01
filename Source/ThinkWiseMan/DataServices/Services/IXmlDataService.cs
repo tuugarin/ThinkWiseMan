@@ -8,8 +8,8 @@ namespace DataServices
     public interface IXmlDataService
     {
 
-        IAsyncOperation<IEnumerable<WiseIdeaModel>> GetThoughtsByAuthorNameAsync(string author);
-        IAsyncOperation<IEnumerable<WiseIdeaModel>> GetThoughtsByDayAsync(int day, int month);
+        Task<IEnumerable<WiseIdeaModel>> GetThoughtsByAuthorNameAsync(string author);
+        Task<IEnumerable<WiseIdeaModel>> GetThoughtsByDayAsync(int day, int month);
         
     }
 }

@@ -11,10 +11,9 @@ namespace DataServices
 {
     public sealed class XmlDataService : IXmlDataService
     {
-        public IAsyncOperation<IEnumerable<WiseIdeaModel>> GetThoughtsByAuthorNameAsync(string author)
+        public async Task<IEnumerable<WiseIdeaModel>> GetThoughtsByAuthorNameAsync(string author)
         {
-            return Task.Run<IEnumerable<WiseIdeaModel>>(async () =>
-            {
+           
                 var content = await GetFileContent();
                 XElement root = XElement.Parse(content);
                 IEnumerable<WiseIdeaModel> thoughts =
@@ -29,17 +28,15 @@ namespace DataServices
                     };
 
                 return thoughts;
-            }).AsAsyncOperation();
 
 
 
 
         }
 
-        public IAsyncOperation<IEnumerable<WiseIdeaModel>> GetThoughtsByDayAsync(int day, int month)
+        public async Task<IEnumerable<WiseIdeaModel>> GetThoughtsByDayAsync(int day, int month)
         {
-            return Task.Run<IEnumerable<WiseIdeaModel>>(async () =>
-            {
+           
                 var content = await GetFileContent();
                 XElement root = XElement.Parse(content);
 
@@ -54,19 +51,16 @@ namespace DataServices
                         Author = thought.Element("Author").Value
                     };
                 return thoughts;
-            }).AsAsyncOperation();
+            
 
         }
-        IAsyncOperation<string> GetFileContent()
+        async Task<string> GetFileContent()
         {
-            return Task.Run<string>(async () =>
-            {
                 var currentFolder = Windows.ApplicationModel.Package.Current.InstalledLocation;
                 var dataFolder = await currentFolder.GetFolderAsync("Data");
                 var file = await dataFolder.GetFileAsync("thoughts.xml");
                 var content = await FileIO.ReadTextAsync(file);
                 return content;
-            }).AsAsyncOperation<string>();
 
         }
 
