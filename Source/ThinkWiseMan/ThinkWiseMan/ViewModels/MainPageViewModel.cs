@@ -8,12 +8,27 @@ using DataServices.Models;
 using DataServices;
 using Prism.Windows.Navigation;
 using Windows.ApplicationModel.Background;
+using Windows.Storage;
+using Prism.Commands;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml;
+using ThinkWiseMan.Views;
+using System.Windows.Input;
+using ThinkWiseMan.Helpers;
 
 namespace ThinkWiseMan.ViewModels
 {
     public class MainPageViewModel : ViewModelBase
     {
         IXmlDataService xmlDataService = new XmlDataService();
+        INavigationService NavigationService;
+        IBackgroundTaskManager BackgroundTaskManager;
+        public ICommand GoToSettingsCommand => new DelegateCommand(() => NavigationService.Navigate("Settings", null));
+        public MainPageViewModel(INavigationService navigationService, IBackgroundTaskManager backgroundTaskManager)
+        {
+            NavigationService = navigationService;
+            BackgroundTaskManager = backgroundTaskManager;
+        }
         private DateTimeOffset _currentDate;
 
         public DateTimeOffset CurrentDate
@@ -59,17 +74,8 @@ namespace ThinkWiseMan.ViewModels
             {
                 Ideas.Add(item);
             }
-            foreach (var task in BackgroundTaskRegistration.AllTasks)
-            {
-                task.Value.Unregister(true);
-            }
-
-            var builder = new BackgroundTaskBuilder();
-            builder.Name = "ThinkWiseTask";
-            builder.TaskEntryPoint = "BackgroundTasks.NotifierBackgroundTask";
-            builder.SetTrigger(new TimeTrigger(15, false));
-            var ret = builder.Register();
-            base.OnNavigatedTo(e, viewModelState);
+            await BackgroundTaskManager.RegisterNotificationTask();
+            //   base.OnNavigatedTo(e, viewModelState);
 
         }
 
@@ -91,6 +97,7 @@ namespace ThinkWiseMan.ViewModels
         {
             return await xmlDataService.GetThoughtsByDayAsync(day, month);
         }
+
 
     }
 
