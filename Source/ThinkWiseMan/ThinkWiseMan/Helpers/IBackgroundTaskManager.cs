@@ -4,6 +4,7 @@ namespace ThinkWiseMan.Helpers
 {
     public interface IBackgroundTaskManager
     {
-        Task RegisterNotificationTask();
+        Task RegisterNotificationTaskAsync();
+        Task UnregisterNotificationTaskAsync();
     }
 }

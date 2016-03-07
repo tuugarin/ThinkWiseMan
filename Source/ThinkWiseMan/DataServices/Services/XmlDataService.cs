@@ -24,7 +24,8 @@ namespace DataServices
                         Content = thought.Element("Content").Value,
                         Day = int.Parse(thought.Element("Day").Value),
                         Month = int.Parse(thought.Element("Month").Value),
-                        Author = thought.Element("Author").Value
+                        Author = thought.Element("Author").Value,
+                        Selected = false
                     };
 
                 return thoughts;

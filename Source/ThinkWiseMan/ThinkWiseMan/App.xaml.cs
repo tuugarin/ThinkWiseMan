@@ -1,7 +1,9 @@
-﻿using Prism.Unity.Windows;
+﻿using DataServices;
+using Prism.Unity.Windows;
 using System;
 using System.Threading.Tasks;
 using ThinkWiseMan.Helpers;
+using ToastTileCreator;
 using Windows.ApplicationModel.Activation;
 using Windows.Storage;
 
@@ -35,6 +37,8 @@ namespace ThinkWiseMan
         {
             base.ConfigureContainer();
             RegisterTypeIfMissing(typeof(IBackgroundTaskManager), typeof(BackgroundTaskManager), false);
+            RegisterTypeIfMissing(typeof(IXmlDataService), typeof(XmlDataService), false);
+            RegisterTypeIfMissing(typeof(IToastManager), typeof(ToastManager), false);
         }
     }
 }

@@ -2,19 +2,16 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using DataServices.Models;
 using DataServices;
 using Prism.Windows.Navigation;
-using Windows.ApplicationModel.Background;
-using Windows.Storage;
 using Prism.Commands;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml;
-using ThinkWiseMan.Views;
 using System.Windows.Input;
 using ThinkWiseMan.Helpers;
+using System.Linq;
+using Windows.ApplicationModel.DataTransfer;
+using System.Text;
 
 namespace ThinkWiseMan.ViewModels
 {
@@ -23,46 +20,77 @@ namespace ThinkWiseMan.ViewModels
         IXmlDataService xmlDataService = new XmlDataService();
         INavigationService NavigationService;
         IBackgroundTaskManager BackgroundTaskManager;
+
         public ICommand GoToSettingsCommand => new DelegateCommand(() => NavigationService.Navigate("Settings", null));
+        public ICommand GoToSelectedWiseIdea => new DelegateCommand<WiseIdeaModel>((current) => { CurrentWiseIdea = current; });
+        public ICommand CopySelectedWiseIdea => new DelegateCommand(() => {
+            DataPackage dataPackage = new DataPackage();
+            dataPackage.RequestedOperation = DataPackageOperation.Copy;
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine(CurrentWiseIdea.Content);
+            sb.AppendLine(CurrentWiseIdea.Author);
+            dataPackage.SetText(sb.ToString());
+            Clipboard.SetContent(dataPackage);
+        });
+        
         public MainPageViewModel(INavigationService navigationService, IBackgroundTaskManager backgroundTaskManager)
         {
             NavigationService = navigationService;
             BackgroundTaskManager = backgroundTaskManager;
         }
-        private DateTimeOffset _currentDate;
+        //private DateTimeOffset _currentDate;
 
-        public DateTimeOffset CurrentDate
+        //public DateTimeOffset CurrentDate
+        //{
+        //    get
+        //    {
+        //        if (_currentDate == DateTimeOffset.MinValue) _currentDate = DateTime.Now;
+        //        return _currentDate;
+        //    }
+        //    set
+        //    {
+        //        _currentDate = value;
+        //        DateChanged();
+        //    }
+        //}
+
+
+
+        private WiseIdeaModel _currentWiseIdea;
+
+        public WiseIdeaModel CurrentWiseIdea
         {
-            get
-            {
-                if (_currentDate == DateTimeOffset.MinValue) _currentDate = DateTime.Now;
-                return _currentDate;
-            }
+            get { return _currentWiseIdea; }
             set
             {
-                _currentDate = value;
-                DateChanged();
+                foreach (var item in Ideas.Where(x => x.Selected))
+                {
+                    item.Selected = false;
+                }
+                if (value != null)
+                {
+                    value.Selected = true;
+                    _currentWiseIdea = value;
+
+                    OnPropertyChanged("CurrentWiseIdea");
+
+                }
+
             }
         }
 
 
-        private ObservableCollection<WiseIdeaModel> _ideas;
-
+        private ObservableCollection<WiseIdeaModel> _ideas = new ObservableCollection<WiseIdeaModel>();
         public ObservableCollection<WiseIdeaModel> Ideas
         {
             get
             {
-                if (_ideas != null)
-                    return _ideas;
-                else
-                {
-                    _ideas = new ObservableCollection<WiseIdeaModel>();
-                    return _ideas;
-                }
+                return _ideas;
             }
             set
             {
                 _ideas = value;
+                OnPropertyChanged("Ideas");
             }
         }
 
@@ -72,22 +100,24 @@ namespace ThinkWiseMan.ViewModels
             var list = await GetIdeasToday();
             foreach (var item in list)
             {
-                Ideas.Add(item);
+                _ideas.Add(item);
             }
-            await BackgroundTaskManager.RegisterNotificationTask();
+            _currentWiseIdea = _ideas[0];
+            //Ideas = new ObservableCollection<WiseIdeaModel>(list);
+            await BackgroundTaskManager.RegisterNotificationTaskAsync();
             //   base.OnNavigatedTo(e, viewModelState);
 
         }
 
-        public async void DateChanged()
-        {
-            Ideas.Clear();
-            var list = await GetIdeasByDate(_currentDate.Day, _currentDate.Month);
-            foreach (var item in list)
-            {
-                Ideas.Add(item);
-            }
-        }
+        //public async void DateChanged()
+        //{
+        //    Ideas.Clear();
+        //    var list = await GetIdeasByDate(_currentDate.Day, _currentDate.Month);
+        //    foreach (var item in list)
+        //    {
+        //        Ideas.Add(item);
+        //    }
+        //}
 
         public async Task<IEnumerable<WiseIdeaModel>> GetIdeasToday()
         {

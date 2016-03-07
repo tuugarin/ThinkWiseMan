@@ -7,12 +7,12 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
      xmlns:prism="using:Prism.Windows.Mvvm"
     prism:ViewModelLocator.AutoWireViewModel="true"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    Background="{ThemeResource BackgroundBrush}">
 
-    <StackPanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <TextBlock Text="Настройки" FontSize="25"/>
-        <ToggleSwitch Header="Показывать уведомление" IsOn="{Binding NotificationEnabled, Mode=TwoWay}"/>
-        <TextBlock Text="Время уведомления"/>
-        <TimePicker Time="{Binding NotifcationSheduleTime, Mode=TwoWay}"/>
+    <StackPanel Padding="20,20,20,20" Background="{ThemeResource BackgroundBrush}">
+        <TextBlock Text="Настройки" TextAlignment="Center" FontSize="25"/>
+        <ToggleSwitch Header="Показывать уведомлений" IsOn="{Binding NotificationEnabled, Mode=TwoWay}"/>
+        <TimePicker Header="Время уведомления" IsEnabled="{Binding NotificationEnabled, Mode=OneWay}" Time="{Binding NotifcationSheduleTime, Mode=TwoWay}"/>
     </StackPanel>
 </Page>

@@ -9,7 +9,7 @@ namespace ThinkWiseMan.Helpers
 {
     public class BackgroundTaskManager : IBackgroundTaskManager
     {
-        public async Task RegisterNotificationTask()
+        public async Task RegisterNotificationTaskAsync()
         {
             bool taskRegistred = false;
             foreach (var task in BackgroundTaskRegistration.AllTasks)
@@ -30,13 +30,17 @@ namespace ThinkWiseMan.Helpers
             }
         }
 
-        public void UnRegisterNotificationTask()
+        public async Task UnregisterNotificationTaskAsync()
         {
-            foreach (var task in BackgroundTaskRegistration.AllTasks)
+            await Task.Run(() =>
             {
-                if (task.Value.Name == "ThinkWiseNotificationTask")
-                    task.Value.Unregister(true);
-            }
+                foreach (var task in BackgroundTaskRegistration.AllTasks)
+                {
+                    if (task.Value.Name == "ThinkWiseNotificationTask")
+                        task.Value.Unregister(true);
+                }
+
+            });
         }
     }
 }
