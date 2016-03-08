@@ -23,7 +23,8 @@ namespace ThinkWiseMan.ViewModels
 
         public ICommand GoToSettingsCommand => new DelegateCommand(() => NavigationService.Navigate("Settings", null));
         public ICommand GoToSelectedWiseIdea => new DelegateCommand<WiseIdeaModel>((current) => { CurrentWiseIdea = current; });
-        public ICommand CopySelectedWiseIdea => new DelegateCommand(() => {
+        public ICommand CopySelectedWiseIdea => new DelegateCommand(() =>
+        {
             DataPackage dataPackage = new DataPackage();
             dataPackage.RequestedOperation = DataPackageOperation.Copy;
             StringBuilder sb = new StringBuilder();
@@ -31,8 +32,27 @@ namespace ThinkWiseMan.ViewModels
             sb.AppendLine(CurrentWiseIdea.Author);
             dataPackage.SetText(sb.ToString());
             Clipboard.SetContent(dataPackage);
+
         });
-        
+
+        public ICommand ShareCommand => new DelegateCommand(() =>
+        {
+            DataTransferManager dataTransferManager = DataTransferManager.GetForCurrentView();
+            dataTransferManager.DataRequested += DataTransferManager_DataRequested;
+            DataTransferManager.ShowShareUI();
+
+        });
+
+        private void DataTransferManager_DataRequested(DataTransferManager sender, DataRequestedEventArgs args)
+        {
+            DataRequest request = args.Request;
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine(CurrentWiseIdea.Content);
+            sb.AppendLine(CurrentWiseIdea.Author);
+            request.Data.SetText(sb.ToString());
+            request.Data.Properties.Title = "Поделиться мудростью";
+        }
+
         public MainPageViewModel(INavigationService navigationService, IBackgroundTaskManager backgroundTaskManager)
         {
             NavigationService = navigationService;
@@ -53,7 +73,6 @@ namespace ThinkWiseMan.ViewModels
         //        DateChanged();
         //    }
         //}
-
 
 
         private WiseIdeaModel _currentWiseIdea;

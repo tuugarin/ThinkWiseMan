@@ -35,6 +35,9 @@
 
                                         <VisualState.Setters>
                                             <Setter Target="RichTextBlockMain.Padding" Value="25,20,25,20" />
+                                            <Setter Target="ParagraphContent.FontSize" Value="20" />
+                                            <Setter Target="ParagraphAuthor.FontSize" Value="14" />
+
                                         </VisualState.Setters>
                                     </VisualState>
                                     <VisualState>
@@ -52,10 +55,10 @@
                             </VisualStateManager.VisualStateGroups>
                             <ScrollViewer VerticalScrollMode="Auto" VerticalScrollBarVisibility="Auto">
                                 <RichTextBlock x:Name="RichTextBlockMain" TextWrapping="Wrap" TextTrimming="None"  HorizontalAlignment="Center" Padding="100,100,100,100" VerticalAlignment="Center">
-                                    <Paragraph FontFamily="Sitka Display" FontSize="24" FontStyle="Italic">
+                                    <Paragraph x:Name="ParagraphContent" FontFamily="Sitka Display" FontSize="24" FontStyle="Italic">
                                         <Run Text="{Binding Content}"></Run>
                                     </Paragraph>
-                                    <Paragraph FontFamily="Sitka Display" TextAlignment="Right" FontStyle="Italic" FontSize="18.667">
+                                    <Paragraph x:Name="ParagraphAuthor" FontFamily="Sitka Display" TextAlignment="Right" FontStyle="Italic" FontSize="18.667">
                                         <Run Text="{Binding Author}"></Run>
                                     </Paragraph>
                                 </RichTextBlock>
@@ -96,7 +99,7 @@
     <Page.BottomAppBar>
         <AppBar Background="{ThemeResource BackgroundBrush}" Foreground="{ThemeResource ForegroundBrush}" >
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <AppBarButton x:Uid="AppBarButtonShare" ToolTipService.ToolTip="Поделиться">
+                <AppBarButton x:Uid="AppBarButtonShare" Command="{Binding ShareCommand}" ToolTipService.ToolTip="Поделиться">
                     <AppBarButton.Icon>
                         <FontIcon  Glyph="&#xE72D;"/>
                     </AppBarButton.Icon>
