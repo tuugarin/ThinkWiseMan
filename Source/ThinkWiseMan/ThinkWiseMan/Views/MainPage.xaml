@@ -12,14 +12,13 @@
     Background="{ThemeResource BackgroundBrush}"
     mc:Ignorable="d">
     <Page.Resources>
-       
         <Converters:IdeaVisibilityConverter x:Key="IdeaVisibilityConverter"/>
         <Converters:PageIndicatorVisibilityConverter x:Key="PageIndicatorVisibilityConverter"/>
+        <Converters:FavoritesToIconConverter x:Key="FavoritesToIconConverter"/>
     </Page.Resources>
     <!--<StackPanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">-->
     <!--<DatePicker BorderThickness="0" BorderBrush="Transparent"  HorizontalAlignment="Left" YearVisible="False" Date="{Binding CurrentDate, Mode=TwoWay}" Margin="10,10,0,0" VerticalAlignment="Top"/>-->
     <Grid>
-
         <FlipView Background="{ThemeResource BackgroundBrush}" x:Name="flipView" ItemsSource="{Binding Ideas}" SelectedItem="{Binding CurrentWiseIdea, Mode=TwoWay}" HorizontalAlignment="Stretch"  Margin="0,0,0,26">
             <FlipView.ItemTemplate>
                 <DataTemplate>
@@ -37,6 +36,7 @@
                                             <Setter Target="RichTextBlockMain.Padding" Value="25,20,25,20" />
                                             <Setter Target="ParagraphContent.FontSize" Value="20" />
                                             <Setter Target="ParagraphAuthor.FontSize" Value="14" />
+                                            <Setter Target="ParagraphDate.FontSize" Value="24" />
 
                                         </VisualState.Setters>
                                     </VisualState>
@@ -51,10 +51,14 @@
                                         </VisualState.Setters>
                                     </VisualState>
                                 </VisualStateGroup>
-                                
+
                             </VisualStateManager.VisualStateGroups>
                             <ScrollViewer VerticalScrollMode="Auto" VerticalScrollBarVisibility="Auto">
                                 <RichTextBlock x:Name="RichTextBlockMain" TextWrapping="Wrap" TextTrimming="None"  HorizontalAlignment="Center" Padding="100,100,100,100" VerticalAlignment="Center">
+                                    <Paragraph x:Name="ParagraphDate" TextAlignment="Center" FontFamily="Sitka Display" FontSize="28" FontStyle="Italic" FontWeight="Bold">
+                                        <Run Text="{Binding DateText}" ></Run>
+                                    </Paragraph>
+
                                     <Paragraph x:Name="ParagraphContent" FontFamily="Sitka Display" FontSize="24" FontStyle="Italic">
                                         <Run Text="{Binding Content}"></Run>
                                     </Paragraph>
@@ -97,21 +101,29 @@
     </Grid>
 
     <Page.BottomAppBar>
-        <AppBar Background="{ThemeResource BackgroundBrush}" Foreground="{ThemeResource ForegroundBrush}" >
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <AppBarButton x:Uid="AppBarButtonShare" Command="{Binding ShareCommand}" ToolTipService.ToolTip="Поделиться">
+
+        <CommandBar Name="CommandBar" Background="{ThemeResource BackgroundBrush}" Foreground="{ThemeResource ForegroundBrush}">
+                <AppBarButton  x:Uid="AppBarButtonShare" Label="Поделиться" Command="{Binding ShareCommand}" ToolTipService.ToolTip="Поделиться">
                     <AppBarButton.Icon>
                         <FontIcon  Glyph="&#xE72D;"/>
                     </AppBarButton.Icon>
                 </AppBarButton>
-                <AppBarButton x:Uid="AppBarButtonCopy" Command="{Binding CopySelectedWiseIdea}" ToolTipService.ToolTip="Копировать" Icon="Copy"/>
-                <AppBarButton x:Uid="AppBarButtonLike" Icon="Like" ToolTipService.ToolTip="Понравилось"/>
-                <AppBarButton x:Uid="AppBarButtonSettings"  Icon="Setting" Command="{Binding GoToSettingsCommand}" ToolTipService.ToolTip="Настройки">
-                
+                <AppBarButton  x:Uid="AppBarButtonCopy" Label="Копировать" Command="{Binding CopySelectedWiseIdea}" ToolTipService.ToolTip="Копировать" Icon="Copy"/>
+                <AppBarButton x:Uid="AppBarButtonLike" Label="Нравится"  Command="{Binding ChangeFavorites}" >
+                    <AppBarButton.Icon>
+                        <FontIcon Glyph="{Binding CurrentWiseIdea.IsFavorite, Mode=OneWay, Converter={StaticResource FavoritesToIconConverter}}"/>
+                    </AppBarButton.Icon>
                 </AppBarButton>
-            </StackPanel>
 
-        </AppBar>
+                <AppBarButton  x:Uid="AppBarButtonFavourites" Label="Избранное" Command="{Binding GoToFavouritesCommand}">
+                    <AppBarButton.Icon>
+                        <FontIcon Glyph="&#xE728;"/>
+                    </AppBarButton.Icon>
+                </AppBarButton>
+            <CommandBar.SecondaryCommands>
+                <AppBarButton x:Name="AppBarButtonSettingsSecondary" Label="Настройки" Icon="Setting" Command="{Binding GoToSettingsCommand}"/>
+            </CommandBar.SecondaryCommands>
+        </CommandBar>
     </Page.BottomAppBar>
 
 </Page>

@@ -1,0 +1,54 @@
+﻿<Page
+    x:Class="ThinkWiseMan.Views.FavouritesPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:ThinkWiseMan.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+     xmlns:prism="using:Prism.Windows.Mvvm"
+      prism:ViewModelLocator.AutoWireViewModel="true"
+    Name="favouritesPage"
+    mc:Ignorable="d">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <TextBlock x:Uid="TextBlockTitleFavourites" Text="Избранное" TextAlignment="Center" FontSize="25"/>
+        <ListView ItemsSource="{Binding FavoritesIdeas}" HorizontalAlignment="Stretch" >
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Grid HorizontalAlignment="Stretch">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <RichTextBlock Grid.Row="0" Grid.Column="1" Padding="100,100,100,100" x:Name="RichTextBlockFavourite" TextWrapping="Wrap" TextTrimming="WordEllipsis"  HorizontalAlignment="Stretch"  VerticalAlignment="Center">
+                            <Paragraph x:Name="ParagraphDate" TextAlignment="Center" FontFamily="Sitka Display" FontSize="28" FontStyle="Italic" FontWeight="Bold">
+                                <Run Text="{Binding DateText}" ></Run>
+                            </Paragraph>
+
+                            <Paragraph x:Name="ParagraphContent" TextAlignment="Justify" FontFamily="Sitka Display" FontSize="24" FontStyle="Italic">
+                                <Run Text="{Binding Content}"></Run>
+                            </Paragraph>
+                            <Paragraph x:Name="ParagraphAuthor" FontFamily="Sitka Display" TextAlignment="Right" FontStyle="Italic" FontSize="18.667">
+                                <Run Text="{Binding Author}"></Run>
+                            </Paragraph>
+                        </RichTextBlock>
+                        <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
+                            <Button Background="Transparent" HorizontalAlignment="Center" Command="{Binding DataContext.DeleteFavorite,ElementName=favouritesPage, Mode=OneWay}" 
+                            CommandParameter="{Binding}" ToolTipService.ToolTip="Удалить">
+                                <FontIcon Glyph="&#xE007;"></FontIcon>
+                            </Button>
+                            <Button Background="Transparent" HorizontalAlignment="Center" Command="{Binding DataContext.ShareCommand,ElementName=favouritesPage, Mode=OneWay}" 
+                            CommandParameter="{Binding}" ToolTipService.ToolTip="Поделиться">
+                                <FontIcon  Glyph="&#xE72D;"></FontIcon>
+                            </Button>
+                            <Button Background="Transparent"  x:Uid="AppBarButtonCopy"  CommandParameter="{Binding}" Command="{Binding DataContext.CopySelectedWiseIdea,ElementName=favouritesPage, Mode=OneWay}"  ToolTipService.ToolTip="Копировать">
+                                <FontIcon Glyph="&#xE8C8;"/>
+                            </Button>
+                        </StackPanel>
+
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </Grid>
+</Page>

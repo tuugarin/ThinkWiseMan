@@ -10,6 +10,7 @@ namespace DataServices
 
         Task<IEnumerable<WiseIdeaModel>> GetThoughtsByAuthorNameAsync(string author);
         Task<IEnumerable<WiseIdeaModel>> GetThoughtsByDayAsync(int day, int month);
-        
+        Task AddDeleteFavorite(string id, bool isFavorite);
+        Task<IEnumerable<WiseIdeaModel>> GetFavouritesThoughts();
     }
 }

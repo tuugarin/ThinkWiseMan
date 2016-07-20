@@ -6,5 +6,6 @@ namespace ThinkWiseMan.Helpers
     {
         Task RegisterNotificationTaskAsync();
         Task UnregisterNotificationTaskAsync();
+        Task RegisterNotificationTaskUserPersistAsync();
     }
 }

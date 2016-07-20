@@ -17,9 +17,17 @@ namespace ThinkWiseMan.ViewModels
 {
     public class MainPageViewModel : ViewModelBase
     {
-        IXmlDataService xmlDataService = new XmlDataService();
+        IXmlDataService XmlDataService;
         INavigationService NavigationService;
         IBackgroundTaskManager BackgroundTaskManager;
+
+        public ICommand ChangeFavorites => new DelegateCommand(async () =>
+        {
+            CurrentWiseIdea.IsFavorite = !CurrentWiseIdea.IsFavorite;
+            await XmlDataService.AddDeleteFavorite(_currentWiseIdea.Id, _currentWiseIdea.IsFavorite);
+
+        });
+        public ICommand GoToFavouritesCommand => new DelegateCommand(() => NavigationService.Navigate("Favourites", null));
 
         public ICommand GoToSettingsCommand => new DelegateCommand(() => NavigationService.Navigate("Settings", null));
         public ICommand GoToSelectedWiseIdea => new DelegateCommand<WiseIdeaModel>((current) => { CurrentWiseIdea = current; });
@@ -53,27 +61,13 @@ namespace ThinkWiseMan.ViewModels
             request.Data.Properties.Title = "Поделиться мудростью";
         }
 
-        public MainPageViewModel(INavigationService navigationService, IBackgroundTaskManager backgroundTaskManager)
+        public MainPageViewModel(INavigationService navigationService, IBackgroundTaskManager backgroundTaskManager,
+            IXmlDataService xmlDataService)
         {
             NavigationService = navigationService;
             BackgroundTaskManager = backgroundTaskManager;
+            XmlDataService = xmlDataService;
         }
-        //private DateTimeOffset _currentDate;
-
-        //public DateTimeOffset CurrentDate
-        //{
-        //    get
-        //    {
-        //        if (_currentDate == DateTimeOffset.MinValue) _currentDate = DateTime.Now;
-        //        return _currentDate;
-        //    }
-        //    set
-        //    {
-        //        _currentDate = value;
-        //        DateChanged();
-        //    }
-        //}
-
 
         private WiseIdeaModel _currentWiseIdea;
 
@@ -116,35 +110,25 @@ namespace ThinkWiseMan.ViewModels
 
         public async override void OnNavigatedTo(NavigatedToEventArgs e, Dictionary<string, object> viewModelState)
         {
+            
             var list = await GetIdeasToday();
             foreach (var item in list)
             {
                 _ideas.Add(item);
             }
             _currentWiseIdea = _ideas[0];
-            //Ideas = new ObservableCollection<WiseIdeaModel>(list);
             await BackgroundTaskManager.RegisterNotificationTaskAsync();
-            //   base.OnNavigatedTo(e, viewModelState);
+            base.OnNavigatedTo(e, viewModelState);
 
         }
-
-        //public async void DateChanged()
-        //{
-        //    Ideas.Clear();
-        //    var list = await GetIdeasByDate(_currentDate.Day, _currentDate.Month);
-        //    foreach (var item in list)
-        //    {
-        //        Ideas.Add(item);
-        //    }
-        //}
 
         public async Task<IEnumerable<WiseIdeaModel>> GetIdeasToday()
         {
-            return await xmlDataService.GetThoughtsByDayAsync(DateTime.Now.Day, DateTime.Now.Month);
+            return await XmlDataService.GetThoughtsByDayAsync(DateTime.Now.Day, DateTime.Now.Month);
         }
         public async Task<IEnumerable<WiseIdeaModel>> GetIdeasByDate(int day, int month)
         {
-            return await xmlDataService.GetThoughtsByDayAsync(day, month);
+            return await XmlDataService.GetThoughtsByDayAsync(day, month);
         }
 
 
