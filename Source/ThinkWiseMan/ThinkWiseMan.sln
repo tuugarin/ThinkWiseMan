@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ThinkWiseMan", "ThinkWiseMan\ThinkWiseMan.csproj", "{C84CF0C9-C1C4-406B-9233-52C7ED7EAEE1}"
 EndProject
@@ -15,7 +15,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackgroundTasks", "Backgrou
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataServices", "DataServices\DataServices.csproj", "{A30A3031-F3A1-4998-BB22-BED19FC3F5B6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToastTileCreator", "ToastTileCreator\ToastTileCreator.csproj", "{834AE63B-452F-421F-9792-04E23D0F2CC6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToastTileManager", "ToastTileCreator\ToastTileManager.csproj", "{834AE63B-452F-421F-9792-04E23D0F2CC6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

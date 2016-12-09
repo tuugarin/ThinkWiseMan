@@ -1,0 +1,25 @@
+﻿<#@ template debug="false" hostspecific="true" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ assembly name="System.Xml.Linq" #> 
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Xml.Linq" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".sql" #>
+<#
+string str = System.IO.File.ReadAllText(Host.ResolvePath(System.IO.Path.Combine("Data" ,"thoughts.xml")));
+  XElement root = XElement.Parse(str);
+  StringBuilder sb = new StringBuilder();
+  int i =1;
+  foreach(var node in root.Elements())
+  {
+    sb.AppendLine(String.Format("insert into Ideas (Id,Author,Content,Day,IsFavorite,Month) values ({0},'{1}','{2}',{3},{4},{5});", i,node.Element("Author").Value,
+	node.Element("Content").Value,node.Element("Day").Value,Convert.ToInt32(bool.Parse(node.Element("Favorite").Value)),node.Element("Month").Value));
+	i++;
+	break;
+  }
+  string content = sb.ToString();
+
+
+#>
+<#= content #>  

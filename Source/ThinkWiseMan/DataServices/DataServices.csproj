@@ -11,8 +11,8 @@
     <AssemblyName>DataServices</AssemblyName>
     <DefaultLanguage>ru-RU</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
-    <TargetPlatformVersion>10.0.10240.0</TargetPlatformVersion>
-    <TargetPlatformMinVersion>10.0.10240.0</TargetPlatformMinVersion>
+    <TargetPlatformVersion>10.0.14393.0</TargetPlatformVersion>
+    <TargetPlatformMinVersion>10.0.14393.0</TargetPlatformMinVersion>
     <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -107,9 +107,19 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplicationDbContext.cs" />
+    <Compile Include="ApplicationDbContextExtension.cs" />
+    <Compile Include="Migrations\20161126215521_Init.cs" />
+    <Compile Include="Migrations\20161126215521_Init.designer.cs">
+      <DependentUpon>20161126215521_Init.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\ApplicationDbContextModelSnapshot.cs" />
     <Compile Include="Models\WiseIdeaModel.cs" />
+    <Compile Include="Models\WiseIdeaPresentModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\ISqlDataService.cs" />
     <Compile Include="Services\IXmlDataService.cs" />
+    <Compile Include="Services\SqlDataService.cs" />
     <Compile Include="Services\XmlDataService.cs" />
     <Content Include="Properties\DataServices.rd.xml" />
   </ItemGroup>
@@ -118,6 +128,9 @@
       <Project>{e6c50355-d01e-4caa-884d-d7929861315c}</Project>
       <Name>Prism</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

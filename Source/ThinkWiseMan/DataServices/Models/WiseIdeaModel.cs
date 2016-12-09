@@ -1,19 +1,28 @@
-﻿using Prism.Mvvm;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace DataServices.Models
 {
-    public class WiseIdeaModel : BindableBase
+    public class WiseIdea
     {
-        public string Id { get; set; }
+        [Required]
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
+        [Required]
         public string Author { get; set; }
+        [Required]
         public int Day { get; set; }
+        [Required]
         public int Month { get; set; }
+        [Required]
         public string Content { get; set; }
-        bool _selected;
-        public bool Selected { get { return _selected; } set { base.SetProperty(ref _selected, value); } }
-        bool _isFavorite;
-        public bool IsFavorite { get { return _isFavorite; } set { base.SetProperty(ref _isFavorite, value); } }
-
-        public string DateText { get { return Day + " " + System.Globalization.DateTimeFormatInfo.CurrentInfo.MonthGenitiveNames.GetValue(Month-1); } }
+        [Required]
+        public bool IsFavorite { get; set; }
     }
 }

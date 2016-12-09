@@ -1,0 +1,1 @@
+﻿insert into Ideas (Id, Author, Content, Day, IsFavorite, Month) values (1,'Без автора','Однажды зимой Франциск шел',1,0,1); 

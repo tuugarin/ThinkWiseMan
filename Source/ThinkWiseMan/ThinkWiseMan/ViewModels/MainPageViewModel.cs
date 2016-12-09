@@ -12,25 +12,28 @@ using ThinkWiseMan.Helpers;
 using System.Linq;
 using Windows.ApplicationModel.DataTransfer;
 using System.Text;
+using Microsoft.QueryStringDotNET;
+using Windows.UI.Popups;
 
 namespace ThinkWiseMan.ViewModels
 {
     public class MainPageViewModel : ViewModelBase
     {
-        IXmlDataService XmlDataService;
+        //IXmlDataService XmlDataService;
+        ISqlDataService SqlDataService;
         INavigationService NavigationService;
         IBackgroundTaskManager BackgroundTaskManager;
 
         public ICommand ChangeFavorites => new DelegateCommand(async () =>
         {
             CurrentWiseIdea.IsFavorite = !CurrentWiseIdea.IsFavorite;
-            await XmlDataService.AddDeleteFavorite(_currentWiseIdea.Id, _currentWiseIdea.IsFavorite);
+            await SqlDataService.UpdateFavoritePropery(_currentWiseIdea.Id, _currentWiseIdea.IsFavorite);
 
         });
         public ICommand GoToFavouritesCommand => new DelegateCommand(() => NavigationService.Navigate("Favourites", null));
 
         public ICommand GoToSettingsCommand => new DelegateCommand(() => NavigationService.Navigate("Settings", null));
-        public ICommand GoToSelectedWiseIdea => new DelegateCommand<WiseIdeaModel>((current) => { CurrentWiseIdea = current; });
+        public ICommand GoToSelectedWiseIdea => new DelegateCommand<WiseIdeaPresentModel>((current) => { CurrentWiseIdea = current; });
         public ICommand CopySelectedWiseIdea => new DelegateCommand(() =>
         {
             DataPackage dataPackage = new DataPackage();
@@ -62,16 +65,16 @@ namespace ThinkWiseMan.ViewModels
         }
 
         public MainPageViewModel(INavigationService navigationService, IBackgroundTaskManager backgroundTaskManager,
-            IXmlDataService xmlDataService)
+            ISqlDataService sqlDataService)
         {
             NavigationService = navigationService;
             BackgroundTaskManager = backgroundTaskManager;
-            XmlDataService = xmlDataService;
+            SqlDataService = sqlDataService;
         }
 
-        private WiseIdeaModel _currentWiseIdea;
+        private WiseIdeaPresentModel _currentWiseIdea;
 
-        public WiseIdeaModel CurrentWiseIdea
+        public WiseIdeaPresentModel CurrentWiseIdea
         {
             get { return _currentWiseIdea; }
             set
@@ -93,8 +96,8 @@ namespace ThinkWiseMan.ViewModels
         }
 
 
-        private ObservableCollection<WiseIdeaModel> _ideas = new ObservableCollection<WiseIdeaModel>();
-        public ObservableCollection<WiseIdeaModel> Ideas
+        private ObservableCollection<WiseIdeaPresentModel> _ideas = new ObservableCollection<WiseIdeaPresentModel>();
+        public ObservableCollection<WiseIdeaPresentModel> Ideas
         {
             get
             {
@@ -110,25 +113,34 @@ namespace ThinkWiseMan.ViewModels
 
         public async override void OnNavigatedTo(NavigatedToEventArgs e, Dictionary<string, object> viewModelState)
         {
-            
-            var list = await GetIdeasToday();
+
+            IEnumerable<WiseIdeaPresentModel> list;
+            if (e.Parameter != null)
+            {
+                QueryString qargs = QueryString.Parse(e.Parameter as string);
+                list = await GetIdeasByDate(int.Parse(qargs["day"]), int.Parse(qargs["month"]));
+            }
+            else
+                list = await GetIdeasToday();
             foreach (var item in list)
             {
                 _ideas.Add(item);
             }
-            _currentWiseIdea = _ideas[0];
+            CurrentWiseIdea = Ideas[0];
+            //  MessageDialog dlg = new MessageDialog(CurrentWiseIdea.Author);
+            //await dlg.ShowAsync();
             await BackgroundTaskManager.RegisterNotificationTaskAsync();
             base.OnNavigatedTo(e, viewModelState);
 
         }
 
-        public async Task<IEnumerable<WiseIdeaModel>> GetIdeasToday()
+        public async Task<IEnumerable<WiseIdeaPresentModel>> GetIdeasToday()
         {
-            return await XmlDataService.GetThoughtsByDayAsync(DateTime.Now.Day, DateTime.Now.Month);
+            return await SqlDataService.GetThoughtsByDayAsync(DateTime.Now.Day, DateTime.Now.Month);
         }
-        public async Task<IEnumerable<WiseIdeaModel>> GetIdeasByDate(int day, int month)
+        public async Task<IEnumerable<WiseIdeaPresentModel>> GetIdeasByDate(int day, int month)
         {
-            return await XmlDataService.GetThoughtsByDayAsync(day, month);
+            return await SqlDataService.GetThoughtsByDayAsync(day, month);
         }
 
 

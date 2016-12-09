@@ -10,43 +10,85 @@
     Name="favouritesPage"
     mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <!--DataContext="{Binding Source={StaticResource SampleDataSource}}"-->
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
+          > 
         <TextBlock x:Uid="TextBlockTitleFavourites" Text="Избранное" TextAlignment="Center" FontSize="25"/>
-        <ListView ItemsSource="{Binding FavoritesIdeas}" HorizontalAlignment="Stretch" >
+        <ListView x:Name="listView" Margin="0,0,0,10" HorizontalContentAlignment="Stretch" HorizontalAlignment="Center" ItemsSource="{Binding FavoritesIdeas}">
+            <!--ItemsSource="{Binding WiseIdeaModel}"-->
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
+                </Style>
+            </ListView.ItemContainerStyle>
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <Grid HorizontalAlignment="Stretch">
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <RichTextBlock Grid.Row="0" Grid.Column="1" Padding="100,100,100,100" x:Name="RichTextBlockFavourite" TextWrapping="Wrap" TextTrimming="WordEllipsis"  HorizontalAlignment="Stretch"  VerticalAlignment="Center">
-                            <Paragraph x:Name="ParagraphDate" TextAlignment="Center" FontFamily="Sitka Display" FontSize="28" FontStyle="Italic" FontWeight="Bold">
-                                <Run Text="{Binding DateText}" ></Run>
-                            </Paragraph>
+                    <UserControl>
+                        <Grid>
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup>
+                                    <VisualState>
+                                        <VisualState.StateTriggers>
+                                            <!--VisualState to be triggered when window width is >=320 effective pixels.-->
+                                            <AdaptiveTrigger MinWindowWidth="320" />
+                                        </VisualState.StateTriggers>
 
-                            <Paragraph x:Name="ParagraphContent" TextAlignment="Justify" FontFamily="Sitka Display" FontSize="24" FontStyle="Italic">
-                                <Run Text="{Binding Content}"></Run>
-                            </Paragraph>
-                            <Paragraph x:Name="ParagraphAuthor" FontFamily="Sitka Display" TextAlignment="Right" FontStyle="Italic" FontSize="18.667">
-                                <Run Text="{Binding Author}"></Run>
-                            </Paragraph>
-                        </RichTextBlock>
-                        <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
-                            <Button Background="Transparent" HorizontalAlignment="Center" Command="{Binding DataContext.DeleteFavorite,ElementName=favouritesPage, Mode=OneWay}" 
+                                        <VisualState.Setters>
+                                            <Setter Target="RichTextBlockFavourite.Padding" Value="50,20,50,20" />
+                                            <Setter Target="ParagraphContentFavorites.FontSize" Value="20" />
+                                            <Setter Target="ParagraphAuthorFavorites.FontSize" Value="14" />
+                                            <Setter Target="ParagraphDateFavorites.FontSize" Value="24" />
+
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                    <VisualState>
+                                        <VisualState.StateTriggers>
+                                            <!--VisualState to be triggered when window width is >=720 effective pixels.-->
+                                            <AdaptiveTrigger MinWindowWidth="720" />
+                                        </VisualState.StateTriggers>
+
+                                        <VisualState.Setters>
+                                            <Setter Target="RichTextBlockFavourite.Padding" Value="100,20,100,20" />
+                                            <!--<Setter Target="RichTextBlockFavourite.ParagraphContentFavorites.FontSize" Value="24" />
+                                            <Setter Target="RichTextBlockFavourite.ParagraphAuthorFavorites.FontSize" Value="18" />
+                                            <Setter Target="RichTextBlockFavourite.ParagraphDateFavorites.FontSize" Value="28" />-->
+                                        </VisualState.Setters>
+                                    </VisualState>
+                                </VisualStateGroup>
+
+                            </VisualStateManager.VisualStateGroups>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <RichTextBlock Grid.Row="0" Grid.Column="1" Padding="100,20,100,20" x:Name="RichTextBlockFavourite" TextWrapping="Wrap" TextTrimming="WordEllipsis"  HorizontalAlignment="Center"  VerticalAlignment="Stretch">
+                                <Paragraph x:Name="ParagraphDateFavorites" TextAlignment="Center" FontFamily="Sitka Display" FontSize="28" FontStyle="Italic" FontWeight="Bold">
+                                    <Run Text="{Binding DateText}" ></Run>
+                                </Paragraph>
+
+                                <Paragraph x:Name="ParagraphContentFavorites" TextAlignment="Justify" FontFamily="Sitka Display" FontSize="24" FontStyle="Italic">
+                                    <Run Text="{Binding Content}"></Run>
+                                </Paragraph>
+                                <Paragraph x:Name="ParagraphAuthorFavorites" FontFamily="Sitka Display" TextAlignment="Right" FontStyle="Italic" FontSize="18">
+                                    <Run Text="{Binding Author}"></Run>
+                                </Paragraph>
+                            </RichTextBlock>
+                            <!--<StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
+                                <Button Background="Transparent" HorizontalAlignment="Center" Command="{Binding DataContext.DeleteFavorite,ElementName=favouritesPage, Mode=OneWay}" 
                             CommandParameter="{Binding}" ToolTipService.ToolTip="Удалить">
-                                <FontIcon Glyph="&#xE007;"></FontIcon>
-                            </Button>
-                            <Button Background="Transparent" HorizontalAlignment="Center" Command="{Binding DataContext.ShareCommand,ElementName=favouritesPage, Mode=OneWay}" 
+                                    <FontIcon Glyph="&#xE007;"></FontIcon>
+                                </Button>
+                                <Button Background="Transparent" HorizontalAlignment="Center" Command="{Binding DataContext.ShareCommand,ElementName=favouritesPage, Mode=OneWay}" 
                             CommandParameter="{Binding}" ToolTipService.ToolTip="Поделиться">
-                                <FontIcon  Glyph="&#xE72D;"></FontIcon>
-                            </Button>
-                            <Button Background="Transparent"  x:Uid="AppBarButtonCopy"  CommandParameter="{Binding}" Command="{Binding DataContext.CopySelectedWiseIdea,ElementName=favouritesPage, Mode=OneWay}"  ToolTipService.ToolTip="Копировать">
-                                <FontIcon Glyph="&#xE8C8;"/>
-                            </Button>
-                        </StackPanel>
+                                    <FontIcon  Glyph="&#xE72D;"></FontIcon>
+                                </Button>
+                                <Button Background="Transparent"  x:Uid="AppBarButtonCopy"  CommandParameter="{Binding}" Command="{Binding DataContext.CopySelectedWiseIdea,ElementName=favouritesPage, Mode=OneWay}"  ToolTipService.ToolTip="Копировать">
+                                    <FontIcon Glyph="&#xE8C8;"/>
+                                </Button>
+                            </StackPanel>-->
 
-                    </Grid>
+                        </Grid>
+                    </UserControl>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>

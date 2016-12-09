@@ -6,27 +6,51 @@ using System.Xml.Linq;
 using DataServices.Models;
 using Windows.Storage;
 using Windows.Foundation;
+using System.IO;
 
 namespace DataServices
 {
     public sealed class XmlDataService : IXmlDataService
     {
-        public async Task<IEnumerable<WiseIdeaModel>> GetThoughtsByAuthorNameAsync(string author)
+        static string xmlFileName = "thoughts.xml";
+        static string xmlRelativePath = Path.Combine("Data", xmlFileName);
+        public static async Task<IEnumerable<WiseIdea>> GetAllThoughts()
         {
 
-            var content = await GetFileContent();
+            var content = await GetContent();
             XElement root = XElement.Parse(content);
-            IEnumerable<WiseIdeaModel> thoughts =
+
+            IEnumerable<WiseIdea> thoughts =
+                from thought in root.Elements()
+                select new WiseIdea
+                {
+                    Content = thought.Element("Content").Value,
+                    Day = int.Parse(thought.Element("Day").Value),
+                    Month = int.Parse(thought.Element("Month").Value),
+                    Author = thought.Element("Author").Value,
+                    IsFavorite = bool.Parse(thought.Element("Favorite").Value),
+                };
+            return thoughts;
+
+
+        }
+
+        public async Task<IEnumerable<WiseIdeaPresentModel>> GetThoughtsByAuthorNameAsync(string author)
+        {
+
+            var content = await GetFileLocalContent();
+            XElement root = XElement.Parse(content);
+            IEnumerable<WiseIdeaPresentModel> thoughts =
                 from thought in root.Elements()
                 where thought.Element("Author").Value == author
-                select new WiseIdeaModel
+                select new WiseIdeaPresentModel
                 {
                     Content = thought.Element("Content").Value,
                     Day = int.Parse(thought.Element("Day").Value),
                     Month = int.Parse(thought.Element("Month").Value),
                     Author = thought.Element("Author").Value,
                     IsFavorite = bool.Parse(thought.Element("Favorite").Value),
-                    Id = thought.Attribute("ID").Value
+                    Id = int.Parse(thought.Element("ID").Value)
                 };
 
             return thoughts;
@@ -35,56 +59,56 @@ namespace DataServices
 
 
         }
-        public async Task<IEnumerable<WiseIdeaModel>> GetThoughtsByDayAsync(int day, int month)
+        public async Task<IEnumerable<WiseIdeaPresentModel>> GetThoughtsByDayAsync(int day, int month)
         {
 
-            var content = await GetFileContent();
+            var content = await GetFileLocalContent();
             XElement root = XElement.Parse(content);
 
-            IEnumerable<WiseIdeaModel> thoughts =
+            IEnumerable<WiseIdeaPresentModel> thoughts =
                 from thought in root.Elements()
                 where thought.Element("Day").Value == day.ToString() && thought.Element("Month").Value == month.ToString()
-                select new WiseIdeaModel
+                select new WiseIdeaPresentModel
                 {
                     Content = thought.Element("Content").Value,
                     Day = int.Parse(thought.Element("Day").Value),
                     Month = int.Parse(thought.Element("Month").Value),
                     Author = thought.Element("Author").Value,
                     IsFavorite = bool.Parse(thought.Element("Favorite").Value),
-                    Id = thought.Attribute("ID").Value
+                    Id = int.Parse(thought.Element("ID").Value)
                 };
             return thoughts;
 
 
         }
-        public async Task<IEnumerable<WiseIdeaModel>> GetFavouritesThoughts()
+        public async Task<IEnumerable<WiseIdeaPresentModel>> GetFavouritesThoughts()
         {
 
-            var content = await GetFileContent();
+            var content = await GetFileLocalContent();
             XElement root = XElement.Parse(content);
 
-            IEnumerable<WiseIdeaModel> thoughts =
+            IEnumerable<WiseIdeaPresentModel> thoughts =
                 from thought in root.Elements()
                 where thought.Element("Favorite").Value == bool.TrueString
-                select new WiseIdeaModel
+                select new WiseIdeaPresentModel
                 {
                     Content = thought.Element("Content").Value,
                     Day = int.Parse(thought.Element("Day").Value),
                     Month = int.Parse(thought.Element("Month").Value),
                     Author = thought.Element("Author").Value,
                     IsFavorite = bool.Parse(thought.Element("Favorite").Value),
-                    Id = thought.Attribute("ID").Value
+                    Id = int.Parse(thought.Element("ID").Value)
                 };
             return thoughts;
 
 
         }
-        public async Task AddDeleteFavorite(string id, bool isFavorite)
+        public async Task AddDeleteFavorite(int id, bool isFavorite)
         {
-            var content = await GetFileContent();
+            var content = await GetFileLocalContent();
             XElement root = XElement.Parse(content);
 
-            var wiseElement = root.Elements().SingleOrDefault(e => e.Attribute("ID").Value == id);
+            var wiseElement = root.Elements().SingleOrDefault(e => e.Element("ID").Value == id.ToString());
             if (wiseElement != null)
             {
                 wiseElement.Element("Favorite").Value = isFavorite.ToString();
@@ -93,25 +117,58 @@ namespace DataServices
 
         }
 
-        async Task<string> GetFileContent()
+        public async static Task<string> GetContent()
         {
-            var localFolder = ApplicationData.Current.LocalFolder;
-            if (await localFolder.TryGetItemAsync("thoughts.xml") == null)
+            return await Task.Run(() =>
+             {
+                 var path = Path.Combine(Windows.ApplicationModel.Package.Current.InstalledLocation.Path, xmlRelativePath);
+                 return File.ReadAllText(path);
+             });
+
+        }
+
+        async Task EnsureXmlFileExist()
+        {
+            await Task.Run(async () =>
             {
-                var currentFolder = Windows.ApplicationModel.Package.Current.InstalledLocation;
-                var dataFolder = await currentFolder.GetFolderAsync("Data");
-                var file = await dataFolder.GetFileAsync("thoughts.xml");
-                var content = await FileIO.ReadTextAsync(file);
-                var localFile = await localFolder.CreateFileAsync("thoughts.xml");
-                await FileIO.WriteTextAsync(localFile, content);
-                return content;
+                var xmlPath = Path.Combine(ApplicationData.Current.LocalFolder.Path, xmlFileName);
+                if (!File.Exists(xmlPath))
+                {
+                    string content = await GetContent();
+                    var localFolder = ApplicationData.Current.LocalFolder;
+                    File.WriteAllText(localFolder.Path, xmlFileName);
+                }
             }
-            else
+             );
+        }
+
+        async Task<string> GetFileLocalContent()
+        {
+            await EnsureXmlFileExist();
+            var content = await Task.Run(() =>
             {
-                var file = await localFolder.GetFileAsync("thoughts.xml");
-                var content = await FileIO.ReadTextAsync(file);
-                return content;
-            }
+                var localFolder = ApplicationData.Current.LocalFolder;
+                var path = Path.Combine(localFolder.Path, xmlFileName);
+                return File.ReadAllText(path);
+            });
+            return content;
+
+            //if (await localFolder.TryGetItemAsync("thoughts.xml") == null)
+            //{
+            //    var currentFolder = Windows.ApplicationModel.Package.Current.InstalledLocation;
+            //    var dataFolder = await currentFolder.GetFolderAsync("Data");
+            //    var file = await dataFolder.GetFileAsync("thoughts.xml");
+            //    var content = await FileIO.ReadTextAsync(file);
+            //    var localFile = await localFolder.CreateFileAsync("thoughts.xml");
+            //    await FileIO.WriteTextAsync(localFile, content);
+            //    return content;
+            //}
+            //else
+            //{
+            //    var file = await localFolder.GetFileAsync("thoughts.xml");
+            //    var content = await FileIO.ReadTextAsync(file);
+            //    return content;
+            //}
 
         }
         async Task SaveFileContent(string content)

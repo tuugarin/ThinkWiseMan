@@ -62,7 +62,7 @@
                                     <Paragraph x:Name="ParagraphContent" FontFamily="Sitka Display" FontSize="24" FontStyle="Italic">
                                         <Run Text="{Binding Content}"></Run>
                                     </Paragraph>
-                                    <Paragraph x:Name="ParagraphAuthor" FontFamily="Sitka Display" TextAlignment="Right" FontStyle="Italic" FontSize="18.667">
+                                    <Paragraph x:Name="ParagraphAuthor" FontFamily="Sitka Display" TextAlignment="Right" FontStyle="Italic" FontSize="18">
                                         <Run Text="{Binding Author}"></Run>
                                     </Paragraph>
                                 </RichTextBlock>

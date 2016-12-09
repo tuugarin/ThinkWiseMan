@@ -18,12 +18,12 @@ namespace ThinkWiseMan.ViewModels
 {
     public class FavouritesPageViewModel : ViewModelBase
     {
-        IXmlDataService XmlDataService;
-        public FavouritesPageViewModel(IXmlDataService xmlDataService)
+        SqlDataService SqlDataService;
+        public FavouritesPageViewModel(SqlDataService sqlDataService)
         {
-            XmlDataService = xmlDataService;
+            SqlDataService = sqlDataService;
         }
-        public ICommand CopySelectedWiseIdea => new DelegateCommand<WiseIdeaModel>((_currentWiseIdea) =>
+        public ICommand CopySelectedWiseIdea => new DelegateCommand<WiseIdeaPresentModel>((_currentWiseIdea) =>
         {
             DataPackage dataPackage = new DataPackage();
             dataPackage.RequestedOperation = DataPackageOperation.Copy;
@@ -35,7 +35,7 @@ namespace ThinkWiseMan.ViewModels
 
         });
 
-        public ICommand ShareCommand => new DelegateCommand<WiseIdeaModel>((_currentWiseIdea) =>
+        public ICommand ShareCommand => new DelegateCommand<WiseIdeaPresentModel>((_currentWiseIdea) =>
         {
             DataTransferManager dataTransferManager = DataTransferManager.GetForCurrentView();
 
@@ -54,14 +54,14 @@ namespace ThinkWiseMan.ViewModels
 
         });
 
-        public ICommand DeleteFavorite => new DelegateCommand<WiseIdeaModel>(async (_currentWiseIdea) =>
+        public ICommand DeleteFavorite => new DelegateCommand<WiseIdeaPresentModel>(async (_currentWiseIdea) =>
         {
-            await XmlDataService.AddDeleteFavorite(_currentWiseIdea.Id, false);
+            await SqlDataService.UpdateFavoritePropery(_currentWiseIdea.Id, false);
             FavoritesIdeas.Remove(_currentWiseIdea);
 
         });
-        private ObservableCollection<WiseIdeaModel> _favoritesIdeas = new ObservableCollection<WiseIdeaModel>();
-        public ObservableCollection<WiseIdeaModel> FavoritesIdeas
+        private ObservableCollection<WiseIdeaPresentModel> _favoritesIdeas = new ObservableCollection<WiseIdeaPresentModel>();
+        public ObservableCollection<WiseIdeaPresentModel> FavoritesIdeas
         {
             get
             {
@@ -76,7 +76,7 @@ namespace ThinkWiseMan.ViewModels
 
         public override async void OnNavigatedTo(NavigatedToEventArgs e, Dictionary<string, object> viewModelState)
         {
-            var list = await XmlDataService.GetFavouritesThoughts();
+            var list = await SqlDataService.GetFavouritesThoughts();
             foreach (var item in list)
             {
                 _favoritesIdeas.Add(item);

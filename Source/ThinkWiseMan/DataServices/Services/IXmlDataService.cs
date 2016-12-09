@@ -8,9 +8,9 @@ namespace DataServices
     public interface IXmlDataService
     {
 
-        Task<IEnumerable<WiseIdeaModel>> GetThoughtsByAuthorNameAsync(string author);
-        Task<IEnumerable<WiseIdeaModel>> GetThoughtsByDayAsync(int day, int month);
-        Task AddDeleteFavorite(string id, bool isFavorite);
-        Task<IEnumerable<WiseIdeaModel>> GetFavouritesThoughts();
+        Task<IEnumerable<WiseIdeaPresentModel>> GetThoughtsByAuthorNameAsync(string author);
+        Task<IEnumerable<WiseIdeaPresentModel>> GetThoughtsByDayAsync(int day, int month);
+        Task AddDeleteFavorite(int id, bool isFavorite);
+        Task<IEnumerable<WiseIdeaPresentModel>> GetFavouritesThoughts();
     }
 }

@@ -1,4 +1,6 @@
 ﻿using DataServices;
+using Microsoft.QueryStringDotNET;
+using Microsoft.Toolkit.Uwp.Notifications;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,31 +13,23 @@ namespace ToastTileCreator
 {
     public sealed class ToastManager : IToastManager
     {
-        IXmlDataService xmlDataService;
-        public ToastManager(IXmlDataService _xmlDataService)
+        ISqlDataService dataService;
+        public ToastManager(ISqlDataService _dataService)
         {
-            xmlDataService = _xmlDataService;
+            dataService = _dataService;
         }
 
         public async Task<ToastNotification> CreateToastNotificationAsync(int day, int month)
         {
-            XmlDocument toastXml = ToastNotificationManager.GetTemplateContent(ToastTemplateType.ToastText01);
-            var toastNode = toastXml.SelectSingleNode("toast");
-            IXmlNode text = toastXml.GetElementsByTagName("text").FirstOrDefault();
-            IXmlDataService xmlDataService = new XmlDataService();
-            var ideas = await xmlDataService.GetThoughtsByDayAsync(day, month);
-            text.InnerText = ideas.First().Content;
+            var ideas = await dataService.GetThoughtsByDayAsync(day, month);
+            XmlDocument toastXml = GenerateToastContent(ideas.First().Content, "Мысли мудрых", day, month);
             var toast = new ToastNotification(toastXml);
             return toast;
         }
         public async Task<ScheduledToastNotification> CreateSheduledToastNotificationAsync(int day, int month, DateTimeOffset timeToStart)
         {
-            XmlDocument toastXml = ToastNotificationManager.GetTemplateContent(ToastTemplateType.ToastText01);
-            var toastNode = toastXml.SelectSingleNode("toast");
-            IXmlNode text = toastXml.GetElementsByTagName("text").FirstOrDefault();
-            IXmlDataService xmlDataService = new XmlDataService();
-            var ideas = await xmlDataService.GetThoughtsByDayAsync(day, month);
-            text.InnerText = ideas.First().Content;
+            var ideas = await dataService.GetThoughtsByDayAsync(day, month);
+            XmlDocument toastXml = GenerateToastContent(ideas.First().Content, "Мысли мудрых", day, month);
             var toast = new ScheduledToastNotification(toastXml, timeToStart);
             return toast;
         }
@@ -51,6 +45,44 @@ namespace ToastTileCreator
                 }
             });
 
+        }
+        XmlDocument GenerateToastContent(string text, string title, int day, int month)
+        {
+            ToastContent content = new ToastContent()
+            {
+
+                Launch = new QueryString() {
+                    { "day", day.ToString() },
+                    { "month", month.ToString() }
+                }.ToString(), 
+                Visual = new ToastVisual()
+                {
+                    BindingGeneric = new ToastBindingGeneric()
+                    {
+                        Children =
+                                {
+                                        new AdaptiveText()
+                                        {
+                                        Text = title,
+                                        HintStyle = AdaptiveTextStyle.Title
+                                        },
+
+                                        new AdaptiveText()
+                                        {
+                                        Text = text,
+                                        HintStyle = AdaptiveTextStyle.Body
+                                        }
+                                        },
+
+                        AppLogoOverride = new ToastGenericAppLogo()
+                        {
+                            Source = "https://unsplash.it/64?image=883",
+                            HintCrop = ToastGenericAppLogoCrop.Circle
+                        }
+                    }
+                }
+            };
+            return content.GetXml();
         }
     }
 }
