@@ -35,42 +35,22 @@ namespace ThinkWiseMan
                 localSettings.Values["NotifcationSheduleTime"] = time;
             }
 
-            //if (args.Kind == ActivationKind.ToastNotification)
-            //    NavigationService.Navigate("Main", args.Arguments);
-            //else 
+            NavigationService.Navigate("Main", null);
 
-           var result = NavigationService.Navigate("Main", null);
-       
             return Task.FromResult<object>(null);
         }
 
-        protected override async void OnActivated(IActivatedEventArgs args)
+        protected override void OnActivated(IActivatedEventArgs args)
         {
-
-            if (args.PreviousExecutionState != ApplicationExecutionState.Running)
-            {
-                var frame = await InitializeFrameAsync(args);
-               // frame.
-               // frame.Navigate(typeof(MainPage),null);
-
-                await OnLaunchApplicationAsync(null);
-               // NavigationService.Navigate("Main", null);
-            }
-            //base.OnActivated(args);
-            // await InitializeFrameAsync(args);
-            //else
-            //{
-            //    if (args.Kind == ActivationKind.ToastNotification)
-            //    {
-            //        var toastActivationArgs = args as ToastNotificationActivatedEventArgs;
-
-            //        NavigationService.Navigate("Main", toastActivationArgs.Argument);
-            //    }
-            //    else NavigationService.Navigate("Main", null);
-            //}
-
             base.OnActivated(args);
 
+            if (args.Kind == ActivationKind.ToastNotification)
+            {
+                var toastActivationArgs = args as ToastNotificationActivatedEventArgs;
+
+                NavigationService.Navigate("Main", toastActivationArgs.Argument);
+            }
+            else NavigationService.Navigate("Main", null);
         }
 
         protected override void ConfigureContainer()
