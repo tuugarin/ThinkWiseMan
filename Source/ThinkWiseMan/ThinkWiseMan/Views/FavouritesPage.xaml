@@ -8,13 +8,14 @@
      xmlns:prism="using:Prism.Windows.Mvvm"
       prism:ViewModelLocator.AutoWireViewModel="true"
     Name="favouritesPage"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+     FontFamily="{StaticResource  DefaultFont}">
 
     <!--DataContext="{Binding Source={StaticResource SampleDataSource}}"-->
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
           > 
-        <TextBlock x:Uid="TextBlockTitleFavourites" Text="Избранное" TextAlignment="Center" FontSize="25"/>
-        <ListView x:Name="listView" Margin="0,0,0,10" HorizontalContentAlignment="Stretch" HorizontalAlignment="Center" ItemsSource="{Binding FavoritesIdeas}">
+        <TextBlock x:Uid="TextBlockTitleFavourites" Text="Избранное" TextAlignment="Center" FontSize="28" FontWeight="Bold"/>
+        <ListView x:Name="listView" Margin="0,50,0,10" HorizontalContentAlignment="Stretch" HorizontalAlignment="Center" ItemsSource="{Binding FavoritesIdeas}">
             <!--ItemsSource="{Binding WiseIdeaModel}"-->
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
@@ -62,18 +63,18 @@
                                 <RowDefinition/>
                             </Grid.RowDefinitions>
                             <RichTextBlock Grid.Row="0" Grid.Column="1" Padding="100,20,100,20" x:Name="RichTextBlockFavourite" TextWrapping="Wrap" TextTrimming="WordEllipsis"  HorizontalAlignment="Center"  VerticalAlignment="Stretch">
-                                <Paragraph x:Name="ParagraphDateFavorites" TextAlignment="Center" FontFamily="Sitka Display" FontSize="28" FontStyle="Italic" FontWeight="Bold">
+                                <Paragraph x:Name="ParagraphDateFavorites" TextAlignment="Center" FontFamily="{StaticResource  DefaultFont}" FontSize="28" FontStyle="Italic" FontWeight="Bold">
                                     <Run Text="{Binding DateText}" ></Run>
                                 </Paragraph>
 
-                                <Paragraph x:Name="ParagraphContentFavorites" TextAlignment="Justify" FontFamily="Sitka Display" FontSize="24" FontStyle="Italic">
+                                <Paragraph x:Name="ParagraphContentFavorites" TextAlignment="Justify" FontFamily="{StaticResource  DefaultFont}" FontSize="24" FontStyle="Italic">
                                     <Run Text="{Binding Content}"></Run>
                                 </Paragraph>
-                                <Paragraph x:Name="ParagraphAuthorFavorites" FontFamily="Sitka Display" TextAlignment="Right" FontStyle="Italic" FontSize="18">
+                                <Paragraph x:Name="ParagraphAuthorFavorites" TextAlignment="Right" FontFamily="{StaticResource  DefaultFont}" FontStyle="Italic" FontSize="18">
                                     <Run Text="{Binding Author}"></Run>
                                 </Paragraph>
                             </RichTextBlock>
-                            <!--<StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
+                            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
                                 <Button Background="Transparent" HorizontalAlignment="Center" Command="{Binding DataContext.DeleteFavorite,ElementName=favouritesPage, Mode=OneWay}" 
                             CommandParameter="{Binding}" ToolTipService.ToolTip="Удалить">
                                     <FontIcon Glyph="&#xE007;"></FontIcon>
@@ -85,7 +86,7 @@
                                 <Button Background="Transparent"  x:Uid="AppBarButtonCopy"  CommandParameter="{Binding}" Command="{Binding DataContext.CopySelectedWiseIdea,ElementName=favouritesPage, Mode=OneWay}"  ToolTipService.ToolTip="Копировать">
                                     <FontIcon Glyph="&#xE8C8;"/>
                                 </Button>
-                            </StackPanel>-->
+                            </StackPanel>
 
                         </Grid>
                     </UserControl>

@@ -9,8 +9,10 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="ThemeDictionary.xaml"/>
+                <ResourceDictionary Source="SharedResources.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <SampleData:SampleDataSource x:Key="SampleDataSource" d:IsDataSource="True"/>
+            <FontFamily x:Key="DefaultFont">Sitka Display</FontFamily>
         </ResourceDictionary>
     </prism:PrismUnityApplication.Resources>
 </prism:PrismUnityApplication>
