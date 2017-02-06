@@ -76,7 +76,7 @@ namespace ToastTileCreator
 
                         AppLogoOverride = new ToastGenericAppLogo()
                         {
-                            Source = "https://unsplash.it/64?image=883",
+                            Source = "ms-appx:////Assets/ToastImage.png",
                             HintCrop = ToastGenericAppLogoCrop.Circle
                         }
                     }

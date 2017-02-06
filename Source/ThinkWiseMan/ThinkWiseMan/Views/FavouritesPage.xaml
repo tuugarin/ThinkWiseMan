@@ -12,10 +12,37 @@
      FontFamily="{StaticResource  DefaultFont}">
 
     <!--DataContext="{Binding Source={StaticResource SampleDataSource}}"-->
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
-          > 
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" >
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="320" />
+                    </VisualState.StateTriggers>
+
+                    <VisualState.Setters>
+                        <Setter Target="TextBlockEmptyPage.Padding" Value="50,0,50,0" />
+                        <Setter Target="TextBlockEmptyPage.FontSize" Value="18" />
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="720" />
+                    </VisualState.StateTriggers>
+
+                    <VisualState.Setters>
+                        <Setter Target="TextBlockEmptyPage.Padding" Value="100,0,100,0" />
+                        <Setter Target="TextBlockEmptyPage.FontSize" Value="24" />
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
         <TextBlock x:Uid="TextBlockTitleFavourites" Text="Избранное" TextAlignment="Center" FontSize="28" FontWeight="Bold"/>
-        <ListView x:Name="listView" Margin="0,50,0,10" HorizontalContentAlignment="Stretch" HorizontalAlignment="Center" ItemsSource="{Binding FavoritesIdeas}">
+        <TextBlock Text="Пока что здесь пусто..." x:Name="TextBlockEmptyPage" FontStyle="Italic" FontWeight="Light" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding FavoritesIdeas.Count, Converter={StaticResource CountToVisibilityConvertor}}">
+
+        </TextBlock>
+        <ListView  x:Name="listView" Margin="0,50,0,10" HorizontalContentAlignment="Stretch" HorizontalAlignment="Center" ItemsSource="{Binding FavoritesIdeas}"
+                   >
             <!--ItemsSource="{Binding WiseIdeaModel}"-->
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
@@ -75,16 +102,16 @@
                                 </Paragraph>
                             </RichTextBlock>
                             <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
-                                <Button Background="Transparent" HorizontalAlignment="Center" Command="{Binding DataContext.DeleteFavorite,ElementName=favouritesPage, Mode=OneWay}" 
-                            CommandParameter="{Binding}" ToolTipService.ToolTip="Удалить">
-                                    <FontIcon Glyph="&#xE007;"></FontIcon>
-                                </Button>
                                 <Button Background="Transparent" HorizontalAlignment="Center" Command="{Binding DataContext.ShareCommand,ElementName=favouritesPage, Mode=OneWay}" 
                             CommandParameter="{Binding}" ToolTipService.ToolTip="Поделиться">
                                     <FontIcon  Glyph="&#xE72D;"></FontIcon>
                                 </Button>
                                 <Button Background="Transparent"  x:Uid="AppBarButtonCopy"  CommandParameter="{Binding}" Command="{Binding DataContext.CopySelectedWiseIdea,ElementName=favouritesPage, Mode=OneWay}"  ToolTipService.ToolTip="Копировать">
                                     <FontIcon Glyph="&#xE8C8;"/>
+                                </Button>
+                                <Button Background="Transparent" HorizontalAlignment="Center" Command="{Binding DataContext.DeleteFavorite,ElementName=favouritesPage, Mode=OneWay}" 
+                            CommandParameter="{Binding}" ToolTipService.ToolTip="Удалить">
+                                    <FontIcon Glyph="&#xE007;"></FontIcon>
                                 </Button>
                             </StackPanel>
 
