@@ -165,7 +165,7 @@
     </Compile>
     <Compile Include="Converters\CountToVisibilityConvertor.cs" />
     <Compile Include="Converters\FavoritesToIconConverter.cs" />
-    <Compile Include="Converters\IdeaVisibilityConverter.cs" />
+    <Compile Include="Converters\VisibilityConverter.cs" />
     <Compile Include="Converters\PageIndicatorVisibilityConverter.cs" />
     <Compile Include="Helpers\BackgroundTaskManager.cs" />
     <Compile Include="Helpers\IBackgroundTaskManager.cs" />

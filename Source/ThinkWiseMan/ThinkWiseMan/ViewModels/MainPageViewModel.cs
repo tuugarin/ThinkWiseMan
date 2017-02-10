@@ -14,6 +14,7 @@ using Windows.ApplicationModel.DataTransfer;
 using System.Text;
 using Microsoft.QueryStringDotNET;
 using Windows.UI.Popups;
+using Windows.UI.Xaml;
 
 namespace ThinkWiseMan.ViewModels
 {
@@ -72,6 +73,14 @@ namespace ThinkWiseMan.ViewModels
             SqlDataService = sqlDataService;
         }
 
+        private bool isVisibleHomeButton = false;
+
+        public bool IsVisibleHomeButton
+        {
+            get { return isVisibleHomeButton; }
+        }
+
+
         private WiseIdeaPresentModel _currentWiseIdea;
 
         public WiseIdeaPresentModel CurrentWiseIdea
@@ -89,7 +98,7 @@ namespace ThinkWiseMan.ViewModels
                     _currentWiseIdea = value;
 
                     OnPropertyChanged("CurrentWiseIdea");
-
+                    
                 }
 
             }
@@ -119,10 +128,14 @@ namespace ThinkWiseMan.ViewModels
             {
                 QueryString qargs = QueryString.Parse(e.Parameter as string);
                 list = await GetIdeasByDate(int.Parse(qargs["day"]), int.Parse(qargs["month"]));
+                isVisibleHomeButton = true;
             }
             else
+            {
                 list = await GetIdeasToday();
-            foreach (var item in list)
+                isVisibleHomeButton = false;
+            }
+                    foreach (var item in list)
             {
                 _ideas.Add(item);
             }

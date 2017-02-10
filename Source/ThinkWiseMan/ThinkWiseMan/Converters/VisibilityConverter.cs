@@ -8,7 +8,7 @@ using Windows.UI.Xaml.Data;
 
 namespace ThinkWiseMan.Converters
 {
-    class IdeaVisibilityConverter : IValueConverter
+    class VisibilityConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {

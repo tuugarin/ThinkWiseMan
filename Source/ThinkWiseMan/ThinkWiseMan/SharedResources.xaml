@@ -3,7 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:ThinkWiseMan"
       xmlns:Converters="using:ThinkWiseMan.Converters">
-    <Converters:IdeaVisibilityConverter x:Key="IdeaVisibilityConverter"/>
+    <Converters:VisibilityConverter x:Key="VisibilityConverter"/>
     <Converters:PageIndicatorVisibilityConverter x:Key="PageIndicatorVisibilityConverter"/>
     <Converters:FavoritesToIconConverter x:Key="FavoritesToIconConverter"/>
     <Converters:CountToVisibilityConvertor x:Key="CountToVisibilityConvertor"/>

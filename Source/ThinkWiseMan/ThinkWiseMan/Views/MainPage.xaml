@@ -85,7 +85,7 @@
                             <ControlTemplate TargetType="Button" >
                                 <Grid Height="8" Width="8" Margin="10,10">
                                     <Ellipse Fill="Gray" Stroke="Gray" />
-                                    <Ellipse Fill="{ThemeResource ForegroundBrush}" Stroke="{ThemeResource ForegroundBrush}" Visibility="{Binding Selected, Converter={StaticResource IdeaVisibilityConverter}}"/>
+                                    <Ellipse Fill="{ThemeResource ForegroundBrush}" Stroke="{ThemeResource ForegroundBrush}" Visibility="{Binding Selected, Converter={StaticResource VisibilityConverter}}"/>
                                 </Grid>
                             </ControlTemplate>
                         </Button.Template>
@@ -99,7 +99,12 @@
     <Page.BottomAppBar>
 
         <CommandBar FontFamily="{StaticResource DefaultFont}" DefaultLabelPosition="Bottom" Name="CommandBar" Background="{ThemeResource BackgroundBrush}" Foreground="{ThemeResource ForegroundBrush}">
-                <AppBarButton  x:Uid="AppBarButtonShare" Width="70" Label="Поделиться" Command="{Binding ShareCommand}" ToolTipService.ToolTip="Поделиться">
+            <AppBarButton  x:Uid="AppBarButtonHome" Visibility="{Binding IsVisibleHomeButton, Converter={StaticResource VisibilityConverter}}" Label="На главную"  Command="{Binding GoToHome}">
+                <AppBarButton.Icon>
+                    <FontIcon Glyph="&#xE10F;"/>
+                </AppBarButton.Icon>
+            </AppBarButton>
+            <AppBarButton  x:Uid="AppBarButtonShare" Width="70" Label="Поделиться" Command="{Binding ShareCommand}" ToolTipService.ToolTip="Поделиться">
                     <AppBarButton.Icon>
                         <FontIcon  Glyph="&#xE72D;"/>
                     </AppBarButton.Icon>

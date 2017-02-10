@@ -39,12 +39,6 @@
           </BackgroundTasks>
         </Extension>
       </Extensions>
-      <uap:ApplicationContentUriRules>
-        <uap:Rule Match="ms-appx-web://Assets/a.png" Type="include" WindowsRuntimeAccess="none" />
-      </uap:ApplicationContentUriRules>
     </Application>
   </Applications>
-  <Capabilities>
-    <Capability Name="internetClient" />
-  </Capabilities>
 </Package>
