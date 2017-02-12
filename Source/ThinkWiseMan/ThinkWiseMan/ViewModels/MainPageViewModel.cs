@@ -20,7 +20,7 @@ namespace ThinkWiseMan.ViewModels
 {
     public class MainPageViewModel : ViewModelBase
     {
-        //IXmlDataService XmlDataService;
+
         ISqlDataService SqlDataService;
         INavigationService NavigationService;
         IBackgroundTaskManager BackgroundTaskManager;
@@ -32,7 +32,7 @@ namespace ThinkWiseMan.ViewModels
 
         });
         public ICommand GoToFavouritesCommand => new DelegateCommand(() => NavigationService.Navigate("Favourites", null));
-
+        public ICommand GoToHomeCommand => new DelegateCommand(() => { NavigationService.Navigate("Main", null); });
         public ICommand GoToSettingsCommand => new DelegateCommand(() => NavigationService.Navigate("Settings", null));
         public ICommand GoToSelectedWiseIdea => new DelegateCommand<WiseIdeaPresentModel>((current) => { CurrentWiseIdea = current; });
         public ICommand CopySelectedWiseIdea => new DelegateCommand(() =>
@@ -62,7 +62,7 @@ namespace ThinkWiseMan.ViewModels
             sb.AppendLine(CurrentWiseIdea.Content);
             sb.AppendLine(CurrentWiseIdea.Author);
             request.Data.SetText(sb.ToString());
-            request.Data.Properties.Title = "Поделиться мудростью";
+            request.Data.Properties.Title = "Мысли мудрых";
         }
 
         public MainPageViewModel(INavigationService navigationService, IBackgroundTaskManager backgroundTaskManager,
@@ -98,7 +98,7 @@ namespace ThinkWiseMan.ViewModels
                     _currentWiseIdea = value;
 
                     OnPropertyChanged("CurrentWiseIdea");
-                    
+
                 }
 
             }
@@ -127,7 +127,10 @@ namespace ThinkWiseMan.ViewModels
             if (e.Parameter != null)
             {
                 QueryString qargs = QueryString.Parse(e.Parameter as string);
-                list = await GetIdeasByDate(int.Parse(qargs["day"]), int.Parse(qargs["month"]));
+                int day = int.Parse(qargs["day"]);
+                int month = int.Parse(qargs["month"]);
+                list = await GetIdeasByDate(day, month);
+                if(!(day == DateTime.Now.Day && month == DateTime.Now.Month))
                 isVisibleHomeButton = true;
             }
             else
@@ -135,7 +138,7 @@ namespace ThinkWiseMan.ViewModels
                 list = await GetIdeasToday();
                 isVisibleHomeButton = false;
             }
-                    foreach (var item in list)
+            foreach (var item in list)
             {
                 _ideas.Add(item);
             }

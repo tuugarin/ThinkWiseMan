@@ -178,9 +178,6 @@
     <Compile Include="Views\FavouritesPage.xaml.cs">
       <DependentUpon>FavouritesPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ItemThoughtPage.xaml.cs">
-      <DependentUpon>ItemThoughtPage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
@@ -227,10 +224,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Page>
     <Page Include="Views\FavouritesPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\ItemThoughtPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

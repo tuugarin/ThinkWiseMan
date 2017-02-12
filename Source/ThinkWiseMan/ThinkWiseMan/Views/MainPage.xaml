@@ -70,7 +70,7 @@
                 </DataTemplate>
             </FlipView.ItemTemplate>
         </FlipView>
-        <ItemsControl Background="{ThemeResource BackgroundBrush}" Foreground="{ThemeResource ForegroundBrush}" ItemsSource="{Binding Ideas}" 
+        <ItemsControl Margin="0,0,0,20" Background="{ThemeResource BackgroundBrush}" Foreground="{ThemeResource ForegroundBrush}" ItemsSource="{Binding Ideas}" 
                       Visibility="{Binding Ideas.Count, Converter={StaticResource PageIndicatorVisibilityConverter}}"
                       HorizontalAlignment="Center" VerticalAlignment="Bottom">
             <ItemsControl.ItemsPanel>
@@ -99,17 +99,18 @@
     <Page.BottomAppBar>
 
         <CommandBar FontFamily="{StaticResource DefaultFont}" DefaultLabelPosition="Bottom" Name="CommandBar" Background="{ThemeResource BackgroundBrush}" Foreground="{ThemeResource ForegroundBrush}">
-            <AppBarButton  x:Uid="AppBarButtonHome" Visibility="{Binding IsVisibleHomeButton, Converter={StaticResource VisibilityConverter}}" Label="На главную"  Command="{Binding GoToHome}">
+            <AppBarButton   x:Uid="AppBarButtonHome" Visibility="{Binding IsVisibleHomeButton, Converter={StaticResource VisibilityConverter}}" Label="Домой"  Command="{Binding GoToHomeCommand}">
                 <AppBarButton.Icon>
                     <FontIcon Glyph="&#xE10F;"/>
                 </AppBarButton.Icon>
             </AppBarButton>
-            <AppBarButton  x:Uid="AppBarButtonShare" Width="70" Label="Поделиться" Command="{Binding ShareCommand}" ToolTipService.ToolTip="Поделиться">
+            <AppBarButton  x:Uid="AppBarButtonShare"  Label="Делиться" Command="{Binding ShareCommand}" ToolTipService.ToolTip="Делиться">
                     <AppBarButton.Icon>
                         <FontIcon  Glyph="&#xE72D;"/>
                     </AppBarButton.Icon>
+                
                 </AppBarButton>
-                <AppBarButton  x:Uid="AppBarButtonCopy" Width="70" Label="Копировать" Command="{Binding CopySelectedWiseIdea}" ToolTipService.ToolTip="Копировать" Icon="Copy"/>
+            
                 <AppBarButton x:Uid="AppBarButtonLike" Label="Нравится"  Command="{Binding ChangeFavorites}" >
                     <AppBarButton.Icon>
                         <FontIcon Glyph="{Binding CurrentWiseIdea.IsFavorite, Mode=OneWay, Converter={StaticResource FavoritesToIconConverter}}"/>
@@ -122,6 +123,7 @@
                     </AppBarButton.Icon>
                 </AppBarButton>
             <CommandBar.SecondaryCommands>
+                <AppBarButton  x:Uid="AppBarButtonCopy" Label="Копировать цитату" Command="{Binding CopySelectedWiseIdea}" ToolTipService.ToolTip="Копировать цитату" Icon="Copy"/>
                 <AppBarButton x:Name="AppBarButtonSettingsSecondary" Label="Настройки" Icon="Setting" Command="{Binding GoToSettingsCommand}"/>
             </CommandBar.SecondaryCommands>
         </CommandBar>

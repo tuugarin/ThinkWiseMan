@@ -12,7 +12,7 @@
      FontFamily="{StaticResource  DefaultFont}">
 
     <!--DataContext="{Binding Source={StaticResource SampleDataSource}}"-->
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" >
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"  Margin="0,0,0,15">
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup>
                 <VisualState>
@@ -41,12 +41,19 @@
         <TextBlock Text="Пока что здесь пусто..." x:Name="TextBlockEmptyPage" FontStyle="Italic" FontWeight="Light" HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="{Binding FavoritesIdeas.Count, Converter={StaticResource CountToVisibilityConvertor}}">
 
         </TextBlock>
-        <ListView  x:Name="listView" Margin="0,50,0,10" HorizontalContentAlignment="Stretch" HorizontalAlignment="Center" ItemsSource="{Binding FavoritesIdeas}"
-                   >
+        <ListView  FocusVisualPrimaryBrush="Transparent" x:Name="listView" Margin="0,30,0,0" HorizontalContentAlignment="Stretch" HorizontalAlignment="Center" ItemsSource="{Binding FavoritesIdeas}"
+            >
             <!--ItemsSource="{Binding WiseIdeaModel}"-->
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ListViewItem">
+                                <ListViewItemPresenter PointerOverBackground="Transparent"/>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
                 </Style>
             </ListView.ItemContainerStyle>
             <ListView.ItemTemplate>
@@ -62,7 +69,7 @@
                                         </VisualState.StateTriggers>
 
                                         <VisualState.Setters>
-                                            <Setter Target="RichTextBlockFavourite.Padding" Value="50,20,50,20" />
+                                            <Setter Target="RichTextBlockFavourite.Padding" Value="25,25,25,25" />
                                             <Setter Target="ParagraphContentFavorites.FontSize" Value="20" />
                                             <Setter Target="ParagraphAuthorFavorites.FontSize" Value="14" />
                                             <Setter Target="ParagraphDateFavorites.FontSize" Value="24" />
@@ -76,7 +83,7 @@
                                         </VisualState.StateTriggers>
 
                                         <VisualState.Setters>
-                                            <Setter Target="RichTextBlockFavourite.Padding" Value="100,20,100,20" />
+                                            <Setter Target="RichTextBlockFavourite.Padding" Value="100,100,100,100" />
                                             <!--<Setter Target="RichTextBlockFavourite.ParagraphContentFavorites.FontSize" Value="24" />
                                             <Setter Target="RichTextBlockFavourite.ParagraphAuthorFavorites.FontSize" Value="18" />
                                             <Setter Target="RichTextBlockFavourite.ParagraphDateFavorites.FontSize" Value="28" />-->
@@ -121,4 +128,18 @@
             </ListView.ItemTemplate>
         </ListView>
     </Grid>
+    <Page.BottomAppBar>
+
+        <CommandBar  FontFamily="{StaticResource DefaultFont}" DefaultLabelPosition="Bottom" Name="CommandBar" Background="{ThemeResource BackgroundBrush}" Foreground="{ThemeResource ForegroundBrush}">
+            <AppBarButton  x:Uid="AppBarButtonHome" Label="Домой"  Command="{Binding GoToHomeCommand}">
+                <AppBarButton.Icon>
+                    <FontIcon Glyph="&#xE10F;"/>
+                </AppBarButton.Icon>
+            </AppBarButton>
+
+            <CommandBar.SecondaryCommands>
+                <AppBarButton x:Name="AppBarButtonSettingsSecondary" Label="Настройки" Icon="Setting" Command="{Binding GoToSettingsCommand}"/>
+            </CommandBar.SecondaryCommands>
+        </CommandBar>
+    </Page.BottomAppBar>
 </Page>

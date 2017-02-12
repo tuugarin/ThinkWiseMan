@@ -19,10 +19,13 @@ namespace ThinkWiseMan.ViewModels
     public class FavouritesPageViewModel : ViewModelBase
     {
         SqlDataService SqlDataService;
-        public FavouritesPageViewModel(SqlDataService sqlDataService)
+        INavigationService NavigationService;
+        public FavouritesPageViewModel(SqlDataService sqlDataService, INavigationService navigationService)
         {
             SqlDataService = sqlDataService;
+            NavigationService = navigationService;
         }
+        public ICommand GoToSettingsCommand => new DelegateCommand(() => NavigationService.Navigate("Settings", null));
         public ICommand CopySelectedWiseIdea => new DelegateCommand<WiseIdeaPresentModel>((_currentWiseIdea) =>
         {
             DataPackage dataPackage = new DataPackage();
@@ -34,7 +37,7 @@ namespace ThinkWiseMan.ViewModels
             Clipboard.SetContent(dataPackage);
 
         });
-
+        public ICommand GoToHomeCommand => new DelegateCommand(() => { NavigationService.Navigate("Main", null); });
         public ICommand ShareCommand => new DelegateCommand<WiseIdeaPresentModel>((_currentWiseIdea) =>
         {
             DataTransferManager dataTransferManager = DataTransferManager.GetForCurrentView();

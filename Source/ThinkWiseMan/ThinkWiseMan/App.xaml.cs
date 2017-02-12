@@ -31,7 +31,7 @@ namespace ThinkWiseMan
 
             if (localSettings.Values["NotifcationSheduleTime"] == null)
             {
-                TimeSpan time = new TimeSpan(22, 30, 00);
+                TimeSpan time = new TimeSpan(08, 00, 00);
                 localSettings.Values["NotifcationSheduleTime"] = time;
             }
 
