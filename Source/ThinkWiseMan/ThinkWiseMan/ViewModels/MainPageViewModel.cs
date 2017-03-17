@@ -15,6 +15,7 @@ using System.Text;
 using Microsoft.QueryStringDotNET;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
+using Windows.System;
 
 namespace ThinkWiseMan.ViewModels
 {
@@ -30,6 +31,12 @@ namespace ThinkWiseMan.ViewModels
             CurrentWiseIdea.IsFavorite = !CurrentWiseIdea.IsFavorite;
             await SqlDataService.UpdateFavoritePropery(_currentWiseIdea.Id, _currentWiseIdea.IsFavorite);
 
+        });
+        public ICommand GoToStoreAndReview => new DelegateCommand(async () =>
+        {
+            const string productId = "9nbwt5sdv3qj";
+            var uri = new Uri("ms-windows-store://review/?ProductId=" + productId);
+            await Launcher.LaunchUriAsync(uri);
         });
         public ICommand GoToFavouritesCommand => new DelegateCommand(() => NavigationService.Navigate("Favourites", null));
         public ICommand GoToHomeCommand => new DelegateCommand(() => { NavigationService.Navigate("Main", null); });
@@ -130,8 +137,8 @@ namespace ThinkWiseMan.ViewModels
                 int day = int.Parse(qargs["day"]);
                 int month = int.Parse(qargs["month"]);
                 list = await GetIdeasByDate(day, month);
-                if(!(day == DateTime.Now.Day && month == DateTime.Now.Month))
-                isVisibleHomeButton = true;
+                if (!(day == DateTime.Now.Day && month == DateTime.Now.Month))
+                    isVisibleHomeButton = true;
             }
             else
             {
@@ -143,8 +150,6 @@ namespace ThinkWiseMan.ViewModels
                 _ideas.Add(item);
             }
             CurrentWiseIdea = Ideas[0];
-            //  MessageDialog dlg = new MessageDialog(CurrentWiseIdea.Author);
-            //await dlg.ShowAsync();
             await BackgroundTaskManager.RegisterNotificationTaskAsync();
             base.OnNavigatedTo(e, viewModelState);
 

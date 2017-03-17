@@ -13,7 +13,7 @@
 
     <StackPanel Padding="20,20,20,20" Background="{ThemeResource BackgroundBrush}">
         <TextBlock Text="Настройки" FontWeight="Bold" TextAlignment="Center" FontSize="28"/>
-        <ToggleSwitch Header="Показывать уведомления" FontFamily="{StaticResource  DefaultFont}" IsOn="{Binding NotificationEnabled, Mode=TwoWay}"/>
-        <TimePicker Header="Время уведомления" FontFamily="{StaticResource  DefaultFont}" IsEnabled="{Binding NotificationEnabled, Mode=OneWay}" Time="{Binding NotifcationSheduleTime, Mode=TwoWay}"/>
+        <ToggleSwitch Header="Показывать уведомления" IsOn="{Binding NotificationEnabled, Mode=TwoWay}"/>
+        <TimePicker Header="Время уведомления" IsEnabled="{Binding NotificationEnabled, Mode=OneWay}" Time="{Binding NotifcationSheduleTime, Mode=TwoWay}"/>
     </StackPanel>
 </Page>

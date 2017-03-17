@@ -105,24 +105,25 @@
                 </AppBarButton.Icon>
             </AppBarButton>
             <AppBarButton  x:Uid="AppBarButtonShare"  Label="Делиться" Command="{Binding ShareCommand}" ToolTipService.ToolTip="Делиться">
-                    <AppBarButton.Icon>
-                        <FontIcon  Glyph="&#xE72D;"/>
-                    </AppBarButton.Icon>
-                
-                </AppBarButton>
-            
-                <AppBarButton x:Uid="AppBarButtonLike" Label="Нравится"  Command="{Binding ChangeFavorites}" >
-                    <AppBarButton.Icon>
-                        <FontIcon Glyph="{Binding CurrentWiseIdea.IsFavorite, Mode=OneWay, Converter={StaticResource FavoritesToIconConverter}}"/>
-                    </AppBarButton.Icon>
-                </AppBarButton>
+                <AppBarButton.Icon>
+                    <FontIcon  Glyph="&#xE72D;"/>
+                </AppBarButton.Icon>
 
-                <AppBarButton  x:Uid="AppBarButtonFavourites" Label="Избранное"  Command="{Binding GoToFavouritesCommand}">
-                    <AppBarButton.Icon>
-                        <FontIcon Glyph="&#xE728;"/>
-                    </AppBarButton.Icon>
-                </AppBarButton>
+            </AppBarButton>
+
+            <AppBarButton x:Uid="AppBarButtonLike" Label="Нравится"  Command="{Binding ChangeFavorites}" >
+                <AppBarButton.Icon>
+                    <FontIcon Glyph="{Binding CurrentWiseIdea.IsFavorite, Mode=OneWay, Converter={StaticResource FavoritesToIconConverter}}"/>
+                </AppBarButton.Icon>
+            </AppBarButton>
+
+            <AppBarButton  x:Uid="AppBarButtonFavourites" Label="Избранное"  Command="{Binding GoToFavouritesCommand}">
+                <AppBarButton.Icon>
+                    <FontIcon Glyph="&#xE728;"/>
+                </AppBarButton.Icon>
+            </AppBarButton>
             <CommandBar.SecondaryCommands>
+                <AppBarButton  x:Uid="AppBarButtonReview" Label="Оценить" Command="{Binding GoToStoreAndReview}" ToolTipService.ToolTip="Оценить" Icon="Like"/>
                 <AppBarButton  x:Uid="AppBarButtonCopy" Label="Копировать цитату" Command="{Binding CopySelectedWiseIdea}" ToolTipService.ToolTip="Копировать цитату" Icon="Copy"/>
                 <AppBarButton x:Name="AppBarButtonSettingsSecondary" Label="Настройки" Icon="Setting" Command="{Binding GoToSettingsCommand}"/>
             </CommandBar.SecondaryCommands>

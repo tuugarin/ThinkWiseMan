@@ -54,7 +54,7 @@ namespace ToastTileCreator
                 Launch = new QueryString() {
                     { "day", day.ToString() },
                     { "month", month.ToString() }
-                }.ToString(), 
+                }.ToString(),
                 Visual = new ToastVisual()
                 {
                     BindingGeneric = new ToastBindingGeneric()
@@ -72,13 +72,9 @@ namespace ToastTileCreator
                                         Text = text,
                                         HintStyle = AdaptiveTextStyle.Body
                                         }
-                                        },
+                                        }
 
-                        AppLogoOverride = new ToastGenericAppLogo()
-                        {
-                            Source = "ms-appx:////Assets/ToastImage.png",
-                            HintCrop = ToastGenericAppLogoCrop.Circle
-                        }
+
                     }
                 }
             };
